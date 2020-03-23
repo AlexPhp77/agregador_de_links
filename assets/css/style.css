@@ -24,6 +24,11 @@
 .menu li a:hover{
 	background-color:#66587e;
 }
+.active{
+	background-color:#17a2b8;
+	text-transform:uppercase; 
+
+}
 .conteudo{
     display: flex;  
     flex-wrap:wrap;
@@ -79,4 +84,13 @@ body{
 	min-width: 254px;
 	min-height: 40px;
 	border-radius: 10px;	
+}
+.aviso{
+    padding-top: 10px;	
+	background-color:#563d7c;
+	color:#fff;
+}
+main article img{
+	width: 100%; 
+	max-width: 100px;
 }

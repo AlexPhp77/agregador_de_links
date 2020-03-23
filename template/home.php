@@ -1,3 +1,8 @@
+<?php 
+require './classes/Anuncios.php';
+$a = new Anuncios();
+
+?>
   <!--Destaque (aviso)--> 
   <div class="jumbotron" style="background-color:#ffe484; margin-bottom: 0px;">
     <h1 class="display-4">Olá, seja bem vindo(a)!</h1>
@@ -21,10 +26,14 @@
   </aside>
   
   <!--Conteúdo-->
-  <main class="conteudo">          
-    <div class="box"></div>
-    <div class="box"></div>
-    <div class="box"></div>  
-    <div class="box"></div>  
-    <div class="box"></div>  
+  <main class="conteudo"> 
+    <?php
+     $anuncios = $a->getAllAnuncios();
+     foreach($anuncios as $anuncio): ?>
+       <article class="box">
+        <?php echo $anuncio['titulo'];?><br/>
+        <img src="assets/images/lupa.png"><br/><br/>
+        <?php echo $anuncio['descricao'];?>         
+       </article>
+    <?php endforeach; ?>  
   </main>

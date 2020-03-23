@@ -1,3 +1,8 @@
+<?php
+session_start();
+require 'classes/Usuario.php';
+$u = new Usuario();
+?>
 <!DOCTYPE html>
 <head lang="pt-br">
   <meta charset="utf-8">
@@ -13,9 +18,18 @@
    
     <nav class="menu">  
       <ul class="logo"><li><a href="./">Agregador de Links</a></li></ul>    
-      <ul>        
-        <li><a href="login.php">Acesso</a></li>
-        <li><a href="cadastro.php">Cadastre-se</a></li>
+      <ul>
+        <?php 
+          if(isset($_SESSION['logado']) && !empty($_SESSION['logado'])):
+            $user = $u->getUsuario($_SESSION['logado']);          
+        ?>
+            <li><a class="active" href="#"><?php echo "Você está conectado, ".$user['nome']; ?></a></li>
+            <li><a href="anuncios.php">Meus anúncios</a></li>
+            <li><a href="sair.php">Sair</a></li>
+        <?php else: ?>
+            <li><a href="login.php">Acesso</a></li>
+            <li><a href="cadastro.php">Cadastre-se</a></li>
+        <?php endif; ?>
       </ul>        
     </nav>
 
