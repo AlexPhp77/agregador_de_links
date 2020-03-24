@@ -1,6 +1,6 @@
 <?php
 require 'template/header.php';
-require 'classes/Usuario.php';
+//require 'classes/Usuario.php';
 
 if(isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) && !empty($_POST['senha'])){
 

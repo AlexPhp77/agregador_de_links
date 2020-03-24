@@ -12,6 +12,7 @@ class Usuario extends Conexao{
     	$this->setNome($nome);
     	$this->setEmail($email);
     	$this->setSenha($senha);
+
     }
 
 	public function getNome(){
@@ -20,7 +21,7 @@ class Usuario extends Conexao{
 	public function setNome($nome){
 		if(strlen($nome) > 2 && is_string($nome)){
 			$this->nome = $nome;
-            return true; 
+            
 		}
 		else{
             echo "<div class='aviso'><ul><li>Nome de usuário precisa ter mais de 2 caracteres e ser formado apenas por letras ou letras e números!</li></ul></div>";
@@ -32,6 +33,7 @@ class Usuario extends Conexao{
 	public function setEmail($email){
 		if(filter_var($email, FILTER_VALIDATE_EMAIL)){
 			$this->email = $email;
+            
 		}
 		else{
 			echo "<div class='aviso'><ul><li>Digite um e-mail válido!</li></ul></div>";
@@ -39,10 +41,10 @@ class Usuario extends Conexao{
 		}
 	}	
 	public function setSenha($senha){
-		if(isset( $senha[7]) ){
-			$this->senha = $senha;
-            return true;
-
+		if(strlen($senha) > 7){           
+			$this->senha = $senha; 
+            $this->cadastrar();/*tive q colocar para funcionar cadastro */  
+           
 		} else{
 			echo "<div class='aviso'><ul><li>Sua senha deve possuir no mínimo 8 caracteres!</li><ul></div>";
 		}			

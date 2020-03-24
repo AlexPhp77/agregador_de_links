@@ -5,10 +5,10 @@ $a = new Anuncios();
 ?>
   <!--Destaque (aviso)--> 
   <div class="jumbotron" style="background-color:#ffe484; margin-bottom: 0px;">
-    <h1 class="display-4">Olá, seja bem vindo(a)!</h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+    <h4 class="display-4" style="color:#17a2b8">Olá, seja bem vindo(a)!</h4>
+    
     <hr class="my-4">
-    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+    <p class="lead">It uses utility classes for typography and spacing to space content out within the larger container.</p>
     <p class="lead">
       <button class="botao btn btn-info">Anuncie</button>
     </p>
@@ -30,9 +30,10 @@ $a = new Anuncios();
     <?php
      $anuncios = $a->getAllAnuncios();
      foreach($anuncios as $anuncio): ?>
-       <article class="box">
-        <?php echo $anuncio['titulo'];?><br/>
-        <img src="assets/images/lupa.png"><br/><br/>
+       <article class="box img-thumbnail img-fluid">
+        <div class="titulo bg-info"><?php echo $anuncio['titulo'];?></div>
+        <br/>
+        <img src="assets/images/<?php echo $anuncio['url']; ?>"><br/><br/>
         <?php echo $anuncio['descricao'];?>         
        </article>
     <?php endforeach; ?>  
