@@ -22,7 +22,7 @@ if(isset($_POST['nome']) && !empty($_POST['nome']) && isset($_POST['email']) && 
 ?>
 
 
-<div class="formulario">
+<div class="caixa">
 	
 	<form method="POST">
 		NOME<br/>

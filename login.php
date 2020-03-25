@@ -13,7 +13,7 @@ if(isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) &
     
 }
 ?>
-<div class="formulario">
+<div class="caixa">
 	
 	<form method="POST">		
 		USUÁRIO ou E-MAIL<br/>

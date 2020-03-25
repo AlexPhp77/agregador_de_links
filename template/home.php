@@ -33,7 +33,12 @@ $a = new Anuncios();
        <article class="box img-thumbnail img-fluid">
         <div class="titulo bg-info"><?php echo $anuncio['titulo'];?></div>
         <br/>
-        <img src="assets/images/<?php echo $anuncio['url']; ?>"><br/><br/>
+          <?php $arquivoimg = 'assets/images/'.$anuncio["url"]; ?>
+          <?php if(!empty($anuncio['url']) && file_exists($arquivoimg)): ?>
+          <img class="img-fluid" src="assets/images/<?php echo $anuncio['url']; ?>">
+          <?php else: ?>
+          <img  class="img-fluid" height="100px" src="assets/images/padrao-img.jpg">
+          <?php endif; ?><br/><br/>
         <?php echo $anuncio['descricao'];?>         
        </article>
     <?php endforeach; ?>  

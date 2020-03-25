@@ -115,11 +115,12 @@ class Usuario extends Conexao{
     	$sql = $this->pdo->prepare('SELECT nome, email FROM usuarios WHERE id = :id ');
     	$sql->bindValue(':id', $id);    	
     	$sql->execute();
-
+        
+        $dados = array();
     	if($sql->rowCount() > 0){
 
     		return $dado = $sql->fetch();    		
-    	}
+    	} return $dados;
     }  
     public function todosUsuarios(){           	
 

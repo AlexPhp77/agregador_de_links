@@ -70,7 +70,7 @@ body{
 
 
 }
-.formulario{
+.caixa{
 	display: flex;				
 	flex: 1;
 	background-color:#563d7c;
@@ -81,11 +81,18 @@ body{
 	color:#ffe484;
 	font-size: 20px;
 }
-.formulario input{
+.caixa input{
 	border: 0px;
 	min-width: 254px;
 	min-height: 40px;
 	border-radius: 10px;	
+}
+.meus-anuncios{
+	display: flex;				
+	flex: 1;
+	background-color:#343a40;		
+	color:#ffe484;
+	
 }
 .aviso{
     padding-top: 10px;	
@@ -94,6 +101,10 @@ body{
 }
 main article img{
 	width: 100%; 
+
+}
+table img{
+	width: 80px;
 
 }
 .titulo{
