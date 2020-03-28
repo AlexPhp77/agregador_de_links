@@ -2,6 +2,7 @@
 require './classes/Anuncios.php';
 $a = new Anuncios();
 
+
 ?>
   <!--Destaque (aviso)--> 
   <div class="jumbotron" style="background-color:#ffe484; margin-bottom: 0px;">
@@ -15,14 +16,31 @@ $a = new Anuncios();
   </div> 
 
   <!--Menu pesquisa-->
-  <aside>
-    <form method="GET">  
+  <aside style="padding: 16px;">
+
+  <form method="GET">
+    <div class="row">
+      <div class="col">
+        
+
+                <form method="GET">  
+      
+      <?php $categorias = $a->getAllcategorias(); ?>
       Categoria:  
-      <input type="text" name="">      
-      Sub categoria:   
-      <input type="text" name="">
-      <img src="assets/images/lupa.png" type="submit">
-    </form>
+      <select class=" form-control" id="categoria" name="categoria">
+            <option></option>
+            <?php $categorias = $a->getAllcategorias(); ?>
+            <?php foreach($categorias as $categoria): ?>  
+            <option  value="<?php echo $categoria['id'];?>">
+              <?php echo utf8_encode($categoria['nome']); ?>  
+            </option>
+      <?php endforeach; ?>
+      </select><br/>  
+        <input class="form-control btn btn-info" type="submit" value="pesquisar">
+      </div>
+    </div>
+  </form>
+   
   </aside>
   
   <!--Conteúdo-->
@@ -30,8 +48,10 @@ $a = new Anuncios();
     <?php
      $anuncios = $a->getAllAnuncios();
      foreach($anuncios as $anuncio): ?>
-       <article class="box img-thumbnail img-fluid">
-        <div class="titulo bg-info"><?php echo $anuncio['titulo'];?></div>
+       <article class="box img-thumbnail img-fluid ">
+        <div class="titulo bg-info text-truncate">
+          <h4><?php echo $anuncio['titulo'];?></h4>
+        </div>
         <br/>
           <?php $arquivoimg = 'assets/images/'.$anuncio["url"]; ?>
           <?php if(!empty($anuncio['url']) && file_exists($arquivoimg)): ?>
@@ -39,7 +59,7 @@ $a = new Anuncios();
           <?php else: ?>
           <img  class="img-fluid" height="100px" src="assets/images/padrao-img.jpg">
           <?php endif; ?><br/><br/>
-        <?php echo $anuncio['descricao'];?>         
+          <p><?php echo $anuncio['descricao'];?></p>         
        </article>
     <?php endforeach; ?>  
   </main>

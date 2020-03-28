@@ -31,7 +31,7 @@ if(isset($_POST['nome']) && !empty($_POST['nome']) && isset($_POST['email']) && 
 		<input type="text" name="email" placeholder="Seu e-mail"><br/><br/>
 		SENHA<br/>
 		<input type="password" name="senha" placeholder="Senha (8 ou mais caracteres)"><br/><br/>	
-		<input class="btn btn-info" type="submit" value="Cadastrar"> 
+		<input class="btn btn-info" type="submit" value="Cadastrar">
 	</form>			
 
 </div>

@@ -20,7 +20,7 @@ if(isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) &
 		<input type="text" name="email" placeholder="Nome de usuário ou e-mail"><br/><br/>
 		SENHA<br/>
 		<input type="password" name="senha" placeholder="Digite sua senha"><br/><br/>	
-		<input class="btn btn-info" type="submit" value="Entrar"> 
+		<input class="btn btn-info" type="submit" value="Entrar">
 	</form>			
 
 </div>

@@ -10,8 +10,6 @@ if(empty($_GET['id'])){
 
 $id = addslashes($_GET['id']);
 
-
-
 $dados = $a->myOneAnuncio($id);
 
 /* segurança: verifica se anúncio é do usuário logado*/
@@ -21,20 +19,36 @@ if($dados['id_usuario'] == $_SESSION['logado']){
 	header('Location: anuncios.php');
 }
 
+if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
+
+    $titulo = addslashes($_POST['titulo']);
+    $descricao = addslashes($_POST['descricao']);
+    $categoria = addslashes($_POST['categoria']); 
+    
+    if(!empty($_FILES['imagem'])){
+        $imagem = $_FILES['imagem'];    
+    }
+
+	$a->usarMetodosAnuncio($titulo, $descricao, $categoria);
+	$a->editarAnuncio($id, $imagem);
+	
+		
+}
+
 ?>
 
 <div class="meus-anuncios caixa">
    
 	<div class="row">
 	    <div class="col-sm">      
-	       <form method="POST">
+	       <form method="POST" enctype="multipart/form-data">
 			<div class="form-group">
 				Título<br/>
 			    <input class="form-control"  type="text" name="titulo" placeholder="Título anúncio" value="<?php echo $dados['titulo']; ?>">
 			</div>		
 			<div class="form-group">
 			    <label for="texto">Sobre</label>
-			    <textarea class="form-control" id="texto" rows="3">
+			    <textarea name="descricao" class="form-control" id="texto" rows="3">
 			    	<?php echo $dados['descricao']; ?>
 			    </textarea>
 			</div>
@@ -65,6 +79,7 @@ if($dados['id_usuario'] == $_SESSION['logado']){
 			</div>					
 			<input class="btn btn-info form-control" type="submit" value="Editar"> 
 		   </form>	
+		  
 	    </div>
 	    <div class="col-sm">
 	      <div class="card mb-3">

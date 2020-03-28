@@ -1,8 +1,17 @@
 <?php
 require 'template/header.php';
+if(!isset($_SESSION['logado']) && empty($_SESSION['logado'])){
+	header("Location: index.php");
+}
+
 require 'classes/Anuncios.php';
 $a = new Anuncios();
 $quantidade = $a->quantidadeMeusAnuncios($_SESSION['logado']);
+
+if(isset($_GET['id']) && !empty($_GET['id'])){
+$id = addslashes($_GET['id']);	
+$a->excluir($id);
+}
 ?>
 
 <div class="meus-anuncios">
@@ -40,8 +49,14 @@ $quantidade = $a->quantidadeMeusAnuncios($_SESSION['logado']);
 	      <td><?php echo $dado['titulo']; ?></td>
 	      <td><?php echo $dado['descricao']; ?></td>
 	      <td>
-	      	<a href="editar.php?id=<?php echo $dado['id']; ?>">	<button class="btn btn-warning mr-3">Editar</button></a>
-	        <a href="excluir.php">	<button class="btn btn-danger">Excluir</button></a>	      
+
+	      	<div class="btn-group" role="group">
+	      		<a class="nav-item" href="editar.php?id=<?php echo $dado['id']; ?>">	      			
+	      			<button type="button" class="btn btn-warning mr-3">Editar</button>
+	            <a class="nav-item" href="anuncios.php?id=<?php echo $dado['id']; ?>">	
+	            	<button type="button" class="btn btn-danger">Excluir</button>
+	      	</div>      	 
+
 	      </td>
 	    </tr>
 	

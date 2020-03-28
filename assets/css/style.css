@@ -27,7 +27,7 @@
 }
 .active{
 	background-color:#17a2b8;
-	text-transform:uppercase; 
+	
 
 }
 .conteudo{
@@ -60,6 +60,7 @@ aside img{
 }
 
 footer{	
+
 	background-color:#ffe484;
 	padding: 12px;
 }
@@ -80,6 +81,7 @@ body{
 	text-shadow: 2px 2px black;
 	color:#ffe484;
 	font-size: 20px;
+	padding-bottom: 20px;
 }
 .caixa input{
 	border: 0px;
