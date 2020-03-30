@@ -10,7 +10,9 @@ $quantidade = $a->quantidadeMeusAnuncios($_SESSION['logado']);
 
 if(isset($_GET['id']) && !empty($_GET['id'])){
 $id = addslashes($_GET['id']);	
+
 $a->excluir($id);
+
 }
 ?>
 
@@ -20,7 +22,7 @@ $a->excluir($id);
 	<table class="table table-dark table-striped table-borderless table-responsive">
 	  <thead>
 	    <tr>
-	      <th scope="col"><button class="btn btn-info">Novo anúncio</button>
+	      <th scope="col"><a href="cadastrar_anuncio.php"><button class="btn btn-info">Novo anúncio</button></a>
 	      <?php if(!empty($quantidade)): ?>
 	      <td scope="col">
 	      	<?php echo "Você tem ".$quantidade." anúncios"; else: echo "Você não tem anúncios ainda"; ?>
@@ -36,9 +38,8 @@ $a->excluir($id);
     
 	    <tr>	     
 	      <th scope="row"><?php echo $chave+1; ?></th>	      
-	      <td>
-            <?php $arquivoimg = 'assets/images/'.$dado["url"]; ?>
-	      	<?php if(!empty($dado['url']) && file_exists($arquivoimg)): ?>
+	      <td>           
+	      	<?php if(!empty($dado['url']) && file_exists('assets/images/'.$dado["url"])): ?>
 			<img class="img-fluid" src="assets/images/<?php echo $dado['url']; ?>">
 	        <?php else: ?>
 	        <img  class="img-fluid" height="100px" src="assets/images/padrao-img.jpg">

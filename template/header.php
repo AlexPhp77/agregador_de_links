@@ -33,7 +33,7 @@ $u = new Usuario();
             $user = $u->getUsuario($_SESSION['logado']);          
         ?>
              <li class="nav-item active">
-              <a class="text-dark bg-info" href="#"><?php echo "Você está conectado, ".$user['nome']; ?></a>
+              <a class="text-light bg-info" href="#"><?php echo "Você está conectado, ".$user['nome']; ?></a>
              </li>
             <li class="nav-item"><a href="anuncios.php">Meus anúncios</a></li>
             <li style="float: right;"><a href="sair.php">Sair</a></li>

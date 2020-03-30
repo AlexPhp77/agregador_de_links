@@ -18,7 +18,7 @@ class Anuncios extends Conexao{
 		return $this->titulo;
 	}	
 	public function setTitulo($titulo){
-		if(strlen($titulo) > 5 && is_string($titulo)){
+		if(strlen($titulo) >= 5 && is_string($titulo)){
 			$this->titulo = $titulo;            
 		}
 		else{
@@ -59,6 +59,19 @@ class Anuncios extends Conexao{
 		$sql->execute();      
        
         $dados = array();      
+		if($sql->rowCount() > 0){
+			 $dados = $sql->fetchAll();
+			 return $dados;
+		} return $dados; 
+	}
+
+	public function myAllAnuncios2($id){	  			
+
+		$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado FROM anuncios  WHERE anuncios.id_usuario = $id ;");
+		$sql->bindValue(':id', $id);
+		$sql->execute();      
+	   
+	    $dados = array();      
 		if($sql->rowCount() > 0){
 			 $dados = $sql->fetchAll();
 			 return $dados;
@@ -184,5 +197,25 @@ class Anuncios extends Conexao{
 		$sql = $this->pdo->prepare("DELETE FROM anuncios_imagens WHERE id = :id");
 		$sql->bindValue(':id', $id);
 		$sql->execute();
+	}
+
+	public function cadastrar(){
+
+		$sql = $this->pdo->prepare("INSERT INTO anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, id_usuario = :id_usuario, ativado = 0");
+		$sql->bindValue(':titulo', $this->titulo);
+		$sql->bindValue(':descricao', $this->descricao);
+		$sql->bindValue(':id_categoria', $this->categoria);
+		$sql->bindValue(':id_usuario', $_SESSION['logado']);
+		$sql->execute(); 
+        
+        // id do objeto inserido 
+		$id_final = $this->pdo->lastInsertId();
+
+		$sql = $this->pdo->prepare("INSERT INTO anuncios_imagens SET id_anuncio = :id_anuncio, url = :url");
+		$sql->bindValue(':id_anuncio', $id_final);
+		$sql->bindValue(':url', 'url_imagem');
+		$sql->execute();
+
+		echo "Sucesso!";
 	}
 }
