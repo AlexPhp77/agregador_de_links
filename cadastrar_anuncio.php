@@ -43,9 +43,10 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
 
 			    <select class="form-control" id="categoria" name="categoria">
 			      <?php $categorias = $a->getAllcategorias(); ?>
+			       <option></option>
                   <?php foreach($categorias as $categoria): ?>
                    
-                  <option></option>
+                 
 			      <option  value="<?php echo $categoria['id'];?>">
 
 			      	<?php echo utf8_encode($categoria['nome']); ?>	

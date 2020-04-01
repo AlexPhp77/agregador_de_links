@@ -42,9 +42,17 @@ class Anuncios extends Conexao{
 		$this->categoria = $categoria;
 	}
 
-	public function getAllAnuncios(){
+	public function getAllAnuncios($c){
 
-		$sql = $this->pdo->query("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id GROUP BY anuncios_imagens.id_anuncio");
+        if(!empty($c)){
+        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 AND anuncios.id_categoria = :c GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC");
+		    $sql->bindValue(':c', $c);
+		    $sql->execute();
+        } else{
+        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC");
+		    $sql->bindValue(':c', $c);
+		    $sql->execute();
+        }
 
 		$dados = array();
 		if($sql->rowCount() > 0){
@@ -52,7 +60,8 @@ class Anuncios extends Conexao{
 			return $dados = $sql->fetchAll();     
 		} return $dados;
 	}
-	public function myAllAnuncios($id){	  			
+	public function myAllAnuncios($id){	        
+
 
 		$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.id_usuario = :id GROUP BY anuncios_imagens.id_anuncio");
 		$sql->bindValue(':id', $id);
@@ -117,9 +126,25 @@ class Anuncios extends Conexao{
 
 	}
 
+	public function filtroCategoria($c){
+
+		var_dump($c);
+
+		$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 AND anuncios.id_categoria = :$c GROUP BY anuncios_imagens.id_anuncio");
+		$sql->bindValue(':$c', $c);
+		$sql->execute();
+
+		$dados = array();
+		if($sql->rowCount() > 0){
+
+			return $dados = $sql->fetchAll();     
+		} return $dados;
+
+	}
+
 	public function editarAnuncio($id, $imagem){
 
-		$sql = $this->pdo->prepare("UPDATE anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria WHERE id = :id");        
+		$sql = $this->pdo->prepare("UPDATE anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, ativado = 0 WHERE id = :id");        
 		$sql->bindValue(':titulo', $this->titulo);
 		$sql->bindValue(':descricao', $this->descricao);
 		$sql->bindValue(':id_categoria', $this->categoria);
@@ -130,20 +155,21 @@ class Anuncios extends Conexao{
 		 e sobre constantes 
 
 		 Está´recebendo foto vazia e editando, não deveria, preciso arrumar*/
-
+        
+        
     
 		$tipo = $imagem['type'];        
 
 		if($tipo == 'image/png' or 'image/jpeg'){			
 
 
-            $tmpname = md5(time().rand(0,9999)).'.jpeg';
+            $tmpname = md5(time().rand(0,9999)).'.jpg';
 			move_uploaded_file($imagem['tmp_name'], 'assets/images/'.$tmpname);
             
-            if(is_dir('assets/images/'.$tmpname)){
+            if(file_exists('assets/images/'.$tmpname)){
 
-     	       	list($largura, $altura) = getimagesize('assets/images/'.$tmpname);
-     	       	$ratio = $largura/$altura; 
+     	    list($largura, $altura) = getimagesize('assets/images/'.$tmpname);
+     	    $ratio = $largura/$altura; 
      										
 
 			$new_largura = 500;
@@ -168,7 +194,7 @@ class Anuncios extends Conexao{
 			    imagejpeg($img, 'assets/images/'.$tmpname, 80);
             }
 
-        }
+        } 
 
             $sql = $this->pdo->prepare("UPDATE anuncios_imagens SET url = :url WHERE id_anuncio = :id");
             $sql->bindValue(':url', $tmpname);
@@ -180,7 +206,7 @@ class Anuncios extends Conexao{
 
 		} else{
 			echo "<div class='aviso'><ul><li>
-				    Apenas imagens png ou jpg são aceitas!;
+				    Apenas imagens png ou jpg são aceitas!
 				 </li></ul></div>";
 		}
         
@@ -197,6 +223,8 @@ class Anuncios extends Conexao{
 		$sql = $this->pdo->prepare("DELETE FROM anuncios_imagens WHERE id = :id");
 		$sql->bindValue(':id', $id);
 		$sql->execute();
+
+
 	}
 
 	public function cadastrar(){

@@ -13,6 +13,7 @@ $id = addslashes($_GET['id']);
 
 $a->excluir($id);
 
+
 }
 ?>
 
@@ -37,7 +38,12 @@ $a->excluir($id);
     <?php foreach($dados as $chave => $dado): ?>    
     
 	    <tr>	     
-	      <th scope="row"><?php echo $chave+1; ?></th>	      
+	      <th scope="row"><?php echo $chave+1; ?></th>	
+	      <?php if($dado['ativado'] == 0): ?>
+            <td><span class="btn btn-primary bg-primary">Em análise...</span></td>
+          <?php else: ?>
+            <td><span class="btn btn-success bg-success">Aprovado!</span></td>  
+	      <?php endif; ?>      
 	      <td>           
 	      	<?php if(!empty($dado['url']) && file_exists('assets/images/'.$dado["url"])): ?>
 			<img class="img-fluid" src="assets/images/<?php echo $dado['url']; ?>">

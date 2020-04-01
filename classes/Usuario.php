@@ -160,5 +160,27 @@ class Usuario extends Conexao{
         }
 
     }
+
+    public function permissoes($id){
+
+        $sql = $this->pdo->prepare('SELECT permissoes FROM usuarios WHERE id = :id');
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            return $dado = $sql->fetch(); 
+        }
+    }
+
+    public function myUsuario($id){
+
+        $sql = $this->pdo->prepare('SELECT id, nome, email FROM usuarios WHERE id = :id');
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+           return $dado = $sql->fetch();
+        }
+    }
 }
 

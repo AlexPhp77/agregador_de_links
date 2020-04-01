@@ -2,6 +2,14 @@
 require './classes/Anuncios.php';
 $a = new Anuncios();
 
+$filtro = 0;
+
+if(isset($_GET['filtro']) && !empty($_GET['filtro'])){
+   
+   $filtro = $_GET['filtro'];   
+}
+
+$anuncios = $a->getAllAnuncios($filtro);
 
 ?>
   <!--Destaque (aviso)--> 
@@ -26,8 +34,8 @@ $a = new Anuncios();
                 <form method="GET">  
       
       <?php $categorias = $a->getAllcategorias(); ?>
-      Categoria:  
-      <select class=" form-control" id="categoria" name="categoria">
+      Categoria:        
+      <select class=" form-control" id="categoria" name="filtro">
             <option></option>
             <?php $categorias = $a->getAllcategorias(); ?>
             <?php foreach($categorias as $categoria): ?>  
@@ -35,7 +43,10 @@ $a = new Anuncios();
               <?php echo utf8_encode($categoria['nome']); ?>  
             </option>
       <?php endforeach; ?>
-      </select><br/>  
+      </select><br/>  <!--Necessário tornar filtro dinamico e arrumar 
+       quando atualizo fica bloqueado anuncio, precia ativar como valor 1-->
+
+
         <input class="form-control btn btn-info" type="submit" value="pesquisar">
       </div>
     </div>
@@ -46,7 +57,7 @@ $a = new Anuncios();
   <!--Conteúdo-->
   <main class="conteudo"> 
     <?php
-     $anuncios = $a->getAllAnuncios();
+    
      foreach($anuncios as $anuncio): ?>
        <article class="box img-thumbnail img-fluid ">
         <div class="titulo bg-info text-truncate">

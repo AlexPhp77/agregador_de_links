@@ -25,7 +25,7 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
     $descricao = addslashes($_POST['descricao']);
     $categoria = addslashes($_POST['categoria']); 
     
-    if(!empty($_FILES['imagem'])){
+    if(isset($_FILES['imagem']) && !empty($_FILES['imagem'])){
         $imagem = $_FILES['imagem'];    
     }
 
@@ -44,13 +44,11 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
 	       <form method="POST" enctype="multipart/form-data">
 			<div class="form-group">
 				Título<br/>
-			    <input class="form-control"  type="text" name="titulo" placeholder="Título anúncio" value="<?php echo $dados['titulo']; ?>">
+			    <input minlength="5" maxlength="100" class="form-control"  type="text" name="titulo" placeholder="Título anúncio" value="<?php echo $dados['titulo']; ?>">
 			</div>		
 			<div class="form-group">
 			    <label for="texto">Sobre</label>
-			    <textarea name="descricao" class="form-control" id="texto" rows="3">
-			    	<?php echo $dados['descricao']; ?>
-			    </textarea>
+			    <textarea minlength="16"  maxlength="220" name="descricao" class="form-control" id="texto" rows="3"><?php echo $dados['descricao']; ?></textarea>
 			</div>
 			<div class="form-group">
 			    <label for="categoria">Categoria</label>
