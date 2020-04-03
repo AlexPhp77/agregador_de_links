@@ -19,12 +19,11 @@ $permissao = $u->permissoes($id);
 
 
 /*Área restrita. Verifica se campo permissões há administrador*/
+if($permissao[0] !== 'ADMINISTRADOR'){
+	header('Location: anuncios.php');
+}
 ?>
-<?php if($permissao[0] === 'ADMINISTRADOR'): ?>
-<div class="navbar navbar-dark bg-dark">
-	<a class="nav-link bg-light" href="restrito.php">Painel de controle (área restrita)</a>	
-</div>
-<?php endif; ?>
+
 
 <div class="meus-anuncios">
     

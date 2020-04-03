@@ -17,9 +17,7 @@ $a->excluir($id);
 }
 ?>
 
-<div class="meus-anuncios">
-    
-	
+<div class="meus-anuncios">   
 	<table class="table table-dark table-striped table-borderless table-responsive">
 	  <thead>
 	    <tr>
@@ -53,8 +51,7 @@ $a->excluir($id);
              
 	      </td>
 	     
-	      <td><?php echo $dado['titulo']; ?></td>
-	      <td><?php echo $dado['descricao']; ?></td>
+	      <td><p><?php echo $dado['titulo']; ?></p></td>	     
 	      <td>
 
 	      	<div class="btn-group" role="group">

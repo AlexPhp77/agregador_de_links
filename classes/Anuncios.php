@@ -31,7 +31,7 @@ class Anuncios extends Conexao{
 	}	
 	public function setDescricao($descricao){
 		if(strlen($descricao) > 16 && is_string($descricao)){
-			$this->descricao = $descricao;            
+			$this->descricao = trim($descricao);            
 		}
 		else{
             echo "<div class='aviso'><ul><li>Descrição precisa ter mais de 16 letras!</li></ul></div>";
@@ -42,22 +42,23 @@ class Anuncios extends Conexao{
 		$this->categoria = $categoria;
 	}
 
-	public function getAllAnuncios($c){
+	public function getAllAnuncios($c, $inicio, $total_reg){        
+        
 
         if(!empty($c)){
-        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 AND anuncios.id_categoria = :c GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC");
+        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 AND anuncios.id_categoria = :c GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT 4");
 		    $sql->bindValue(':c', $c);
 		    $sql->execute();
-        } else{
-        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC");
+        } elseif(empty($c)){
+        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT $inicio , $total_reg");
 		    $sql->bindValue(':c', $c);
 		    $sql->execute();
-        }
+        } 
 
 		$dados = array();
-		if($sql->rowCount() > 0){
+		if($sql->rowCount() > 0){            
+			return $dados = $sql->fetchAll(); 
 
-			return $dados = $sql->fetchAll();     
 		} return $dados;
 	}
 	public function myAllAnuncios($id){	        
@@ -102,6 +103,18 @@ class Anuncios extends Conexao{
         }
 
     }
+    public function quantidadeTodosAnuncios(){
+
+    	$sql = $this->pdo->query("SELECT COUNT(*) as c FROM anuncios WHERE ativado = 1");               
+
+        if($sql->rowCount() > 0){
+        	$dado = $sql->fetch();
+        	return $dado['c'];
+        } else{
+        	echo "Não há anúncios.";
+        }
+
+    }
     public function myOneAnuncio($id){
 
 		$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id  WHERE anuncios.id = :id GROUP BY anuncios.id_usuario");
@@ -124,6 +137,15 @@ class Anuncios extends Conexao{
 			return $dados = $sql->fetchAll();     
 		} return $dados;
 
+	}
+	public function getIdanuncio(){
+
+		$sql = $this->pdo->query("SELECT id_categoria FROM anuncios");
+		
+		if($sql->rowCount() > 0){
+
+			return $dados = $sql->fetch();     
+		} return $dados;
 	}
 
 	public function filtroCategoria($c){

@@ -5,7 +5,7 @@ class Usuario extends Conexao{
 	private $nome;
 	private $email;
 	private $senha;    
-	private $permissoes;	
+	
     
     public function usarMetodosUsuario($nome, $email, $senha){
 
@@ -168,9 +168,9 @@ class Usuario extends Conexao{
         $sql->execute();
 
         if($sql->rowCount() > 0){
-            return $dado = $sql->fetch(); 
+            return $dado = $sql->fetch();            
         }
-    }
+    }    
 
     public function myUsuario($id){
 
