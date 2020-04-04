@@ -5,13 +5,19 @@ class Anuncios extends Conexao{
 	private $titulo;
 	private $descricao;
 	private $categoria;
+	private $url; 
 
 
-	public function usarMetodosAnuncio($titulo, $descricao, $categoria){
+	public function usarMetodosAnuncio($titulo, $descricao, $categoria, $url){
 
     	$this->setTitulo($titulo);
     	$this->setDescricao($descricao); 
     	$this->setCategoria($categoria); 
+    	$this->setUrl($url);
+    }
+    public function setUrl($url){
+    	/*Necessário verificar url e filtrá-la*/
+    	$this->url = $url;
     }
 
 	public function getTitulo(){
@@ -251,11 +257,12 @@ class Anuncios extends Conexao{
 
 	public function cadastrar(){
 
-		$sql = $this->pdo->prepare("INSERT INTO anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, id_usuario = :id_usuario, ativado = 0");
+		$sql = $this->pdo->prepare("INSERT INTO anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, id_usuario = :id_usuario, url = :url, ativado = 0");
 		$sql->bindValue(':titulo', $this->titulo);
 		$sql->bindValue(':descricao', $this->descricao);
 		$sql->bindValue(':id_categoria', $this->categoria);
 		$sql->bindValue(':id_usuario', $_SESSION['logado']);
+		$sql->bindValue(':url', $this->url); 
 		$sql->execute(); 
         
         // id do objeto inserido 
@@ -267,5 +274,24 @@ class Anuncios extends Conexao{
 		$sql->execute();
 
 		echo "Sucesso!";
+	}
+
+	public function anunciosBloqueados(){
+        
+        $array = array();
+		
+		$sql = $this->pdo->query("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios.id = anuncios_imagens.id_anuncio WHERE ativado = 0");
+         
+		if($sql->rowCount() > 0){
+			return $array = $sql->fetchAll();
+		} return $array;
+	}
+
+	public function ativarAnuncio($id){
+
+		$sql = $this->pdo->prepare("UPDATE anuncios SET ativado = 1 WHERE id = :id");
+		$sql->bindValue(':id', $id);
+		$sql->execute();
+
 	}
 }

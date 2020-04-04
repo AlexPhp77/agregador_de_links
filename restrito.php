@@ -16,41 +16,42 @@ $user = $u->myUsuario($id);
 
 $permissao = $u->permissoes($id);
 
+$anuncios = $a->anunciosBloqueados();
 
+if(isset($_GET['anuncio_usuario']) && !empty($_GET['anuncio_usuario'])){
+	$anuncio_usuario = addslashes($_GET['anuncio_usuario']);
+    $a->excluir($anuncio_usuario);
+}
 
 /*Área restrita. Verifica se campo permissões há administrador*/
 if($permissao[0] !== 'ADMINISTRADOR'){
 	header('Location: anuncios.php');
 }
+
 ?>
 
 
-<div class="meus-anuncios">
+<div class="meus-anuncios" style="padding: 20px; flex-wrap: wrap;">
     
-	
-	<table class="table table-dark table-striped table-borderless table-responsive">
-	  <thead>
-	    <tr>
-	      <th scope="col">
-	      <?php if(!empty($quantidade)): ?>
-	      <td scope="col">
-	      	<?php echo "Você tem ".$quantidade." anúncios"; else: echo "Você não tem anúncios ainda"; ?>
-	      </td>
-	      <?php endif; ?>	
-	      </th>	     
-	    </tr>
-	  </thead>
-	  <tbody>
-	    <tr>   
-	      <td>Nome</td>	     
-	      <td>E-mail</td>	     
-	    </tr>
-	    <tr>
-	      <td><?php echo $user['nome']; ?></td>
-	      <td><?php echo $user['email']; ?></td>
-	    </tr>
-	  </tbody>
-	</table>
-	</div>
+     <?php foreach($anuncios as $anuncio):?>
+       
+      <div class="card" style="width: 18rem; margin-right: 20px; margin-bottom: 20px; max-height: 500px;">
+          <?php $arquivoimg = 'assets/images/'.$anuncio["url"]; ?>
+          <?php if(!empty($anuncio['url']) && file_exists($arquivoimg)): ?>
+		    <img class="card-img-top" src="assets/images/<?php echo $anuncio['url']; ?>" alt="Card image cap">
+		  <?php else: ?>
+		  	<img class="card-img-top" src="assets/images/padrao-img.jpg" alt="Card image cap">
+          <?php endif; ?>
+		  <div class="card-body" style="text-align: justify;">
+		    <h5 class="card-title text-dark"><?php echo $anuncio['titulo']; ?></h5>
+		    <p class="card-text text-dark"><?php echo $anuncio['descricao']; ?></p>
+		    <a href="ativado.php?anuncio_usuario=<?php echo $anuncio['id']; ?>" class="btn btn-primary">Ativar</a>
+		    <a href="restrito.php?anuncio_usuario=<?php echo $anuncio['id']; ?>" class="btn btn-danger">Deletar</a>
+		  </div>
+		</div>
+
+     <?php endforeach; ?>	
+
+</div>
 
 <?php require 'template/footer.php'; ?>

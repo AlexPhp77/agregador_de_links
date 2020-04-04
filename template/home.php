@@ -4,11 +4,14 @@ $a = new Anuncios();
 
 
 
-$filtro = 0;
+
 
 if(isset($_GET['filtro']) && !empty($_GET['filtro'])){
    
-   $filtro = $_GET['filtro'];   
+   $filtro = addslashes($_GET['filtro']);   
+   
+} else{
+  $filtro = 0;
 }
 
 $todosAnuncios = $a->quantidadeTodosAnuncios();
@@ -22,6 +25,8 @@ if(isset($_GET['p']) && !empty($_GET['p'])){
   $inicio = 1; 
 }
 
+/* Se numero de registros for menor do que as paginas
+basta sumir usar um if para desaparecer com paginação*/
 $inicio = ($inicio - 1) * $total_reg;  
 
 echo "registros ".$total_reg."</br>";
@@ -29,10 +34,14 @@ echo "começa ".$inicio;
 
 $anuncios = $a->getAllAnuncios($filtro, $inicio, $total_reg);
 
+$i = ceil($todosAnuncios / $total_reg);
+
 
 $anunc = $a->getIdanuncio();
 
 echo "Tem ".$todosAnuncios." anúncios";
+
+
 
 ?>
 
@@ -60,10 +69,12 @@ echo "Tem ".$todosAnuncios." anúncios";
       <?php $categorias = $a->getAllcategorias(); ?>
       Categoria:        
       <select class=" form-control" id="categoria" name="filtro">
-            <option></option>
+           
             <?php $categorias = $a->getAllcategorias(); ?>
+            <option></option>
             <?php foreach($categorias as $categoria): ?>  
-             <option  value="<?php echo $categoria['id'];?>"<?php echo ($categoria['id']==$anunc['id_categoria'])?'selected="selected"':''; ?>>
+
+              <option  value="<?php echo $categoria['id'];?>">
               <?php echo utf8_encode($categoria['nome']); ?>  
             </option>
       <?php endforeach; ?>
@@ -101,7 +112,7 @@ echo "Tem ".$todosAnuncios." anúncios";
   </main>
   
 
-
+ <?php if($todosAnuncios > 10): ?><!-- paginação some se número de registros for insufiente por página-->
   <nav aria-label="Navegação de página">
    
     <ul class="pagination justify-content-center">
@@ -109,16 +120,27 @@ echo "Tem ".$todosAnuncios." anúncios";
       <li class="page-item">
         <a class="page-link" href="#" tabindex="-1">Anterior</a>
       </li>
+      
+     
+      <?php for($q = 1; $q <= $i; $q++): ?>
 
-      <?php for($q = 1; $q <= 10; $q++): ?>
+        <!--  echo ($inicio==$q)?'bg-info':''; para usar como active dentro da classe mas preciso arrumar -->
 
-        <li class="page-item"><a class="page-link" href="index.php?p=<?php echo $q; ?>"><?php echo $q; ?></a></li> 
+        <li class="page-item ">
+          <a class="page-link" href="index.php?p=<?php echo $q; ?>">
+          <?php echo $q; ?>            
+          </a>
+        </li> 
       
       <?php endfor; ?>
-
+       
       <li class="page-item">
-        <a class="page-link" href="#">Próximo</a>
+
+        
+          <a class="page-link" href="index.php?p=">Próximo</a>
+       
       </li>      
     </ul>
 
   </nav>
+<?php endif; ?>

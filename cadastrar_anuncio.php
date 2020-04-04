@@ -13,9 +13,10 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
 
     $titulo = addslashes($_POST['titulo']);
     $descricao = addslashes($_POST['descricao']);
-    $categoria = addslashes($_POST['categoria']);  
+    $categoria = addslashes($_POST['categoria']);
+    $url = addslashes($_POST['url']); 
 
-	$a->usarMetodosAnuncio($titulo, $descricao, $categoria);
+	$a->usarMetodosAnuncio($titulo, $descricao, $categoria, $url);
 	$a->cadastrar();
 		
 }
@@ -56,7 +57,11 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
 			      <?php endforeach; ?>
 			      	
 
-			    </select>			   
+			    </select><br/>
+			    <div class="form-group">
+					<label for="url">Link: endereço do site (url)</label>
+				    <input class="form-control"  type="text" name="url" placeholder="http://exemplo.com.br">
+			    </div>			   
 			</div>					
 			<input class="btn btn-info form-control" type="submit" value="Enviar"> 
 		   </form>	
