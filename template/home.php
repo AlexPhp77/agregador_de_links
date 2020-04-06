@@ -71,7 +71,7 @@ echo "Tem ".$todosAnuncios." anúncios";
       <select class=" form-control" id="categoria" name="filtro">
            
             <?php $categorias = $a->getAllcategorias(); ?>
-            <option></option>
+            <option value="0"></option>
             <?php foreach($categorias as $categoria): ?>  
 
               <option  value="<?php echo $categoria['id'];?>">
@@ -94,9 +94,11 @@ echo "Tem ".$todosAnuncios." anúncios";
     <?php
     
      foreach($anuncios as $anuncio): ?>
+      <!-- Preciso arrumar o campo url para o artigo funcionar o link etc.-->
+      <a href="<?php echo $anuncio['link']; ?>" target="_blank" style="text-decoration: none;" >
        <article class="box">
         <div class="titulo bg-info text-truncate">
-          <h4><?php echo $anuncio['titulo'];?></h4>
+          <h4><?php echo $anuncio['titulo'];?></h4>             
         </div>
         <br/>
           <?php $arquivoimg = 'assets/images/'.$anuncio["url"]; ?>
@@ -105,8 +107,10 @@ echo "Tem ".$todosAnuncios." anúncios";
           <?php else: ?>
           <img  class="img-fluid" height="100px" src="assets/images/padrao-img.jpg">
           <?php endif; ?><br/><br/>
-          <p style="text-align: justify; overflow:hidden;"><?php echo $anuncio['descricao'];?></p>         
+          <p style="text-align: justify; overflow:hidden;"><?php echo $anuncio['descricao'];?></p> 
+          <button class="btn btn-secondary">Bloquear</button>        
        </article>
+     </a>
     <?php endforeach; ?> 
 
   </main>

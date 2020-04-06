@@ -17,7 +17,11 @@ class Anuncios extends Conexao{
     }
     public function setUrl($url){
     	/*Necessário verificar url e filtrá-la*/
-    	$this->url = $url;
+    	if (filter_var($url, FILTER_VALIDATE_URL)) {
+		    $this->url = $url;
+		} else {
+		    echo("$url is not a valid URL");
+		}    	
     }
 
 	public function getTitulo(){
@@ -52,13 +56,11 @@ class Anuncios extends Conexao{
         
 
         if(!empty($c)){
-        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 AND anuncios.id_categoria = :c GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT 4");
+        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios.link, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 AND anuncios.id_categoria = :c GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT 4");
 		    $sql->bindValue(':c', $c);
 		    $sql->execute();
         } elseif(empty($c)){
-        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT $inicio , $total_reg");
-		    $sql->bindValue(':c', $c);
-		    $sql->execute();
+        	$sql = $this->pdo->query("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios.link, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT $inicio , $total_reg");		    
         } 
 
 		$dados = array();
@@ -172,11 +174,12 @@ class Anuncios extends Conexao{
 
 	public function editarAnuncio($id, $imagem){
 
-		$sql = $this->pdo->prepare("UPDATE anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, ativado = 0 WHERE id = :id");        
+		$sql = $this->pdo->prepare("UPDATE anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, url = :url, ativado = 0 WHERE id = :id");        
 		$sql->bindValue(':titulo', $this->titulo);
 		$sql->bindValue(':descricao', $this->descricao);
 		$sql->bindValue(':id_categoria', $this->categoria);
 		$sql->bindValue(':id', $id);
+		$sql->bindValue(':url', $this->url);
 		$sql->execute();	
 
 		/*preciso assistir upload de arquivo e manipulaçao de imagens 
@@ -250,19 +253,31 @@ class Anuncios extends Conexao{
 
 		$sql = $this->pdo->prepare("DELETE FROM anuncios_imagens WHERE id = :id");
 		$sql->bindValue(':id', $id);
+		$sql->execute();		
+
+		$this->deletarImg($id); 
+	}
+
+	private function deletarImg($id){
+
+		$sql = $this->pdo->prepare("SELECT url FROM anuncios_imagens WHERE id_anuncio = :id");
+		$sql->bindValue(':id', $id);
 		$sql->execute();
 
-
+		if($sql->rowCount()>0){
+			$img = $sql->fetch();
+			unlink('assets/images/'.$img['url']);
+		}
 	}
 
 	public function cadastrar(){
 
-		$sql = $this->pdo->prepare("INSERT INTO anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, id_usuario = :id_usuario, url = :url, ativado = 0");
+		$sql = $this->pdo->prepare("INSERT INTO anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, id_usuario = :id_usuario, link = :link, ativado = 0");
 		$sql->bindValue(':titulo', $this->titulo);
 		$sql->bindValue(':descricao', $this->descricao);
 		$sql->bindValue(':id_categoria', $this->categoria);
 		$sql->bindValue(':id_usuario', $_SESSION['logado']);
-		$sql->bindValue(':url', $this->url); 
+		$sql->bindValue(':link', $this->url); 
 		$sql->execute(); 
         
         // id do objeto inserido 
@@ -280,7 +295,7 @@ class Anuncios extends Conexao{
         
         $array = array();
 		
-		$sql = $this->pdo->query("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios.id = anuncios_imagens.id_anuncio WHERE ativado = 0");
+		$sql = $this->pdo->query("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios.link, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios.id = anuncios_imagens.id_anuncio WHERE ativado = 0");
          
 		if($sql->rowCount() > 0){
 			return $array = $sql->fetchAll();

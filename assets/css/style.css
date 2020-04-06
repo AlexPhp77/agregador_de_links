@@ -1,3 +1,4 @@
+
 .menu{
 	display: flex;
 	justify-content:space-between;
@@ -38,7 +39,7 @@
 }
 .box{
     
-    max-width: 250px;
+    max-width: 242px;
     background-color: #fff;    
     margin: 4px;  
     flex: 1;
@@ -115,6 +116,11 @@ main article {
 	border: 2px solid #eee;
 	border-radius: 5px;
 	padding: 3px;
+	color: #333;
+
+}
+main article:hover{
+	border: 2px solid #17a2b8;
 }
 main article img{
 	max-width: 100%; 

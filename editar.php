@@ -29,7 +29,7 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
         $imagem = $_FILES['imagem'];    
     }
 
-	$a->usarMetodosAnuncio($titulo, $descricao, $categoria);
+	$a->usarMetodosAnuncio($titulo, $descricao, $categoria, $url);
 	$a->editarAnuncio($id, $imagem);
 	
 		
@@ -61,15 +61,17 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
                    
 
 			      <option  value="<?php echo $categoria['id'];?>"<?php echo ($categoria['id']==$dados['id_categoria'])?'selected="selected"':''; ?>>
-
 			      	<?php echo utf8_encode($categoria['nome']); ?>	
-
 			      </option>
 
 			      <?php endforeach; ?>
 			      	
 
 			    </select><br/>
+			     <div class="form-group">
+					<label for="url">Link: endereço do site (url)</label>
+				    <input class="form-control"  type="text" name="url" placeholder="http://exemplo.com.br">
+			    </div><br/>
 			    <label for="imagem">Imagem do anúncio</label>
 			    <div class="form-group">
 			    	<input id="imagem" type="file" name="imagem">			    	
