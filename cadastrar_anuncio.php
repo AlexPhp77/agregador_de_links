@@ -9,7 +9,7 @@ $a = new Anuncios();
 
 $dados = $a->getAllcategorias();
 
-if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
+if(!empty($_POST['titulo']) && !empty($_POST['descricao']) && !empty($_POST['url'])){
 
     $titulo = addslashes($_POST['titulo']);
     $descricao = addslashes($_POST['descricao']);

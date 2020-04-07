@@ -18,10 +18,14 @@ $permissao = $u->permissoes($id);
 
 $anuncios = $a->anunciosBloqueados();
 
-if(isset($_GET['anuncio_usuario']) && !empty($_GET['anuncio_usuario'])){
-	$anuncio_usuario = addslashes($_GET['anuncio_usuario']);
-    $a->excluir($anuncio_usuario); 
+if(isset($_GET['id']) && !empty($_GET['id'])){
+    $id = addslashes($_GET['id']);	
+    $a->deletarImg($id);
+    $a->excluir($id);
+   header( "refresh:0;url=restrito.php" );
+
 }
+
 
 /*Área restrita. Verifica se campo permissões há administrador*/
 if($permissao[0] !== 'ADMINISTRADOR'){
@@ -47,7 +51,7 @@ if($permissao[0] !== 'ADMINISTRADOR'){
 		    <p class="card-text text-dark"><?php echo $anuncio['descricao']; ?></p>
 		    <p class="card-text text-info"><?php echo "Link: ".$anuncio['link']; ?></p>
 		    <a href="ativado.php?anuncio_usuario=<?php echo $anuncio['id']; ?>" class="btn btn-primary">Ativar</a>
-		    <a href="restrito.php?anuncio_usuario=<?php echo $anuncio['id']; ?>" class="btn btn-danger">Deletar</a>
+		    <a href="restrito.php?id=<?php echo $anuncio['id']; ?>" class="btn btn-danger">Deletar</a>
 		  </div>
 		</div>
 

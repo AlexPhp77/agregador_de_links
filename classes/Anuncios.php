@@ -17,11 +17,10 @@ class Anuncios extends Conexao{
     }
     public function setUrl($url){
     	/*Necessário verificar url e filtrá-la*/
-    	if (filter_var($url, FILTER_VALIDATE_URL)) {
+    	
 		    $this->url = $url;
-		} else {
-		    echo("$url is not a valid URL");
-		}    	
+		
+		  	
     }
 
 	public function getTitulo(){
@@ -125,7 +124,7 @@ class Anuncios extends Conexao{
     }
     public function myOneAnuncio($id){
 
-		$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id  WHERE anuncios.id = :id GROUP BY anuncios.id_usuario");
+		$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios.link, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id  WHERE anuncios.id = :id GROUP BY anuncios.id_usuario");
 		$sql->bindValue(':id', $id);
 		$sql->execute();
         
@@ -153,7 +152,7 @@ class Anuncios extends Conexao{
 		if($sql->rowCount() > 0){
 
 			return $dados = $sql->fetch();     
-		} return $dados;
+		} 
 	}
 
 	public function filtroCategoria($c){
@@ -170,26 +169,29 @@ class Anuncios extends Conexao{
 			return $dados = $sql->fetchAll();     
 		} return $dados;
 
-	}
+	}public function editarAnuncio($id){
 
-	public function editarAnuncio($id, $imagem){
-
-		$sql = $this->pdo->prepare("UPDATE anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, url = :url, ativado = 0 WHERE id = :id");        
+		$sql = $this->pdo->prepare("UPDATE anuncios SET titulo = :titulo, descricao = :descricao, id_categoria = :id_categoria, link = :url, ativado = 0 WHERE id = :id");        
 		$sql->bindValue(':titulo', $this->titulo);
 		$sql->bindValue(':descricao', $this->descricao);
 		$sql->bindValue(':id_categoria', $this->categoria);
-		$sql->bindValue(':id', $id);
+		$sql->bindValue(':id', $id);		
 		$sql->bindValue(':url', $this->url);
 		$sql->execute();	
 
-		/*preciso assistir upload de arquivo e manipulaçao de imagens 
-		 e sobre constantes 
+		header("Location: editar.php?id=".$id);
 
-		 Está´recebendo foto vazia e editando, não deveria, preciso arrumar*/
-        
-        
+	}	
+
+	public function editarAnuncioImg($id, $imagem){	
+
+		/*preciso assistir upload de arquivo e manipulaçao de imagens 
+		 e sobre constantes */
+ 
     
-		$tipo = $imagem['type'];        
+		if(!empty($imagem)){
+			$tipo = $imagem['type'];     
+		}   
 
 		if($tipo == 'image/png' or 'image/jpeg'){			
 
@@ -239,9 +241,7 @@ class Anuncios extends Conexao{
 			echo "<div class='aviso'><ul><li>
 				    Apenas imagens png ou jpg são aceitas!
 				 </li></ul></div>";
-		}
-        
-        echo "editado com sucesso";
+		}       
 	
 	}	
 
@@ -251,23 +251,26 @@ class Anuncios extends Conexao{
 		$sql->bindValue(':id', $id);
 		$sql->execute();
 
-		$sql = $this->pdo->prepare("DELETE FROM anuncios_imagens WHERE id = :id");
-		$sql->bindValue(':id', $id);
-		$sql->execute();		
-
 		$this->deletarImg($id); 
+
+		$sql = $this->pdo->prepare("DELETE FROM anuncios_imagens WHERE id_anuncio = :id");
+		$sql->bindValue(':id', $id);
+		$sql->execute();
+
+		header("Refresh:0");			
 	}
 
-	private function deletarImg($id){
+	public function deletarImg($id){
 
-		$sql = $this->pdo->prepare("SELECT url FROM anuncios_imagens WHERE id_anuncio = :id");
+		$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios_imagens.url FROM anuncios_imagens INNER JOIN anuncios ON anuncios_imagens.id_anuncio = $id INNER join usuarios ON anuncios.id_usuario = usuarios.id");
 		$sql->bindValue(':id', $id);
 		$sql->execute();
 
 		if($sql->rowCount()>0){
-			$img = $sql->fetch();
+			$img = $sql->fetch();			
 			unlink('assets/images/'.$img['url']);
-		}
+			return $img['id'];	
+	    }
 	}
 
 	public function cadastrar(){
@@ -288,7 +291,7 @@ class Anuncios extends Conexao{
 		$sql->bindValue(':url', 'url_imagem');
 		$sql->execute();
 
-		echo "Sucesso!";
+		header("Location: anuncios.php");
 	}
 
 	public function anunciosBloqueados(){
@@ -305,6 +308,13 @@ class Anuncios extends Conexao{
 	public function ativarAnuncio($id){
 
 		$sql = $this->pdo->prepare("UPDATE anuncios SET ativado = 1 WHERE id = :id");
+		$sql->bindValue(':id', $id);
+		$sql->execute();
+
+	}
+	public function bloquearAnuncio($id){
+
+		$sql = $this->pdo->prepare("UPDATE anuncios SET ativado = 0 WHERE id = :id");
 		$sql->bindValue(':id', $id);
 		$sql->execute();
 

@@ -24,14 +24,18 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
     $titulo = addslashes($_POST['titulo']);
     $descricao = addslashes($_POST['descricao']);
     $categoria = addslashes($_POST['categoria']); 
-    
-    if(isset($_FILES['imagem']) && !empty($_FILES['imagem'])){
-        $imagem = $_FILES['imagem'];    
+    if(!empty($_POST['link'])){
+        $link = addslashes($_POST['link']);
+    }
+    if(isset($_FILES['imagem']) && !empty($_FILES['imagem']['tmp_name'])){
+        $imagem = $_FILES['imagem']; 
+        $a->editarAnuncioImg($id, $imagem);        
+         
     }
 
-	$a->usarMetodosAnuncio($titulo, $descricao, $categoria, $url);
-	$a->editarAnuncio($id, $imagem);
+	$a->usarMetodosAnuncio($titulo, $descricao, $categoria, $link);
 	
+	$a->editarAnuncio($id);
 		
 }
 
@@ -69,8 +73,8 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
 
 			    </select><br/>
 			     <div class="form-group">
-					<label for="url">Link: endereço do site (url)</label>
-				    <input class="form-control"  type="text" name="url" placeholder="http://exemplo.com.br">
+					<label for="link">Link: endereço do site (url)</label>
+				    <input value="<?php echo $dados['link']; ?>" class="form-control"  type="text" name="link" placeholder="http://exemplo.com.br">
 			    </div><br/>
 			    <label for="imagem">Imagem do anúncio</label>
 			    <div class="form-group">
@@ -86,7 +90,9 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
 	      	<?php $arquivoimg = 'assets/images/'.$dados["url"]; ?>
 	      	<?php if(!empty($dados['url']) && file_exists($arquivoimg)): ?>
 			<img style="width: 500px;" class="img-fluid" src="assets/images/<?php echo $dados['url']; ?>">
-			<button class="btn btn-danger">Excluir</button>
+			<a class="btn btn-danger" href="excluir.php?id=<?php echo $dados['id']; ?>">
+				<button class="btn btn-light">Excluir</button>				
+			</a>
 	        <?php else: ?>
 	        <img style="width: 500px;" class="img-fluid" height="100px" src="assets/images/padrao-img.jpg">
 	        <?php endif; ?>

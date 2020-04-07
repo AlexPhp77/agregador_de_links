@@ -2,8 +2,9 @@
 require './classes/Anuncios.php';
 $a = new Anuncios();
 
-
-
+if(isset($_SESSION['logado']) && !empty($_SESSION['logado'])){
+  $permissao = $u->permissoes($_SESSION['logado']);
+}
 
 
 if(isset($_GET['filtro']) && !empty($_GET['filtro'])){
@@ -40,7 +41,6 @@ $i = ceil($todosAnuncios / $total_reg);
 $anunc = $a->getIdanuncio();
 
 echo "Tem ".$todosAnuncios." anúncios";
-
 
 
 ?>
@@ -95,8 +95,9 @@ echo "Tem ".$todosAnuncios." anúncios";
     
      foreach($anuncios as $anuncio): ?>
       <!-- Preciso arrumar o campo url para o artigo funcionar o link etc.-->
-      <a href="<?php echo $anuncio['link']; ?>" target="_blank" style="text-decoration: none;" >
+      
        <article class="box">
+        <a href="<?php echo $anuncio['link']; ?>" target="_blank" style="text-decoration: none;" >
         <div class="titulo bg-info text-truncate">
           <h4><?php echo $anuncio['titulo'];?></h4>             
         </div>
@@ -108,9 +109,20 @@ echo "Tem ".$todosAnuncios." anúncios";
           <img  class="img-fluid" height="100px" src="assets/images/padrao-img.jpg">
           <?php endif; ?><br/><br/>
           <p style="text-align: justify; overflow:hidden;"><?php echo $anuncio['descricao'];?></p> 
-          <button class="btn btn-secondary">Bloquear</button>        
+          </a> 
+
+          <?php
+           if(isset($_SESSION['logado']) && !empty($_SESSION['logado'])){
+
+           if($permissao[0] == 'ADMINISTRADOR'): ?>
+
+            <a href="bloquear.php?anuncio_usuario=<?php echo $anuncio['id']; ?>">
+              <button class="btn btn-secondary">Bloquear</button> 
+            </a>
+            
+          <?php endif; } ?>
        </article>
-     </a>
+
     <?php endforeach; ?> 
 
   </main>

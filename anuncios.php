@@ -9,12 +9,12 @@ $a = new Anuncios();
 $quantidade = $a->quantidadeMeusAnuncios($_SESSION['logado']);
 
 if(isset($_GET['id']) && !empty($_GET['id'])){
-$id = addslashes($_GET['id']);	
+    $id = addslashes($_GET['id']);	
 
-$a->excluir($id);
-
+    $a->excluir($id);
 
 }
+
 ?>
 
 <div class="meus-anuncios">   
@@ -57,8 +57,10 @@ $a->excluir($id);
 	      	<div class="btn-group" role="group">
 	      		<a class="nav-item" href="editar.php?id=<?php echo $dado['id']; ?>">	      			
 	      			<button type="button" class="btn btn-warning mr-3">Editar</button>
+	      		</a>	
 	            <a class="nav-item" href="anuncios.php?id=<?php echo $dado['id']; ?>">	
 	            	<button type="button" class="btn btn-danger">Excluir</button>
+	            </a>	
 	      	</div>      	 
 
 	      </td>
