@@ -15,33 +15,32 @@ if(isset($_GET['filtro']) && !empty($_GET['filtro'])){
   $filtro = 0;
 }
 
-$todosAnuncios = $a->quantidadeTodosAnuncios();
+$pag = 3;
 
-$total_reg = 10;
+$por_pagina = $pag; 
 
 if(isset($_GET['p']) && !empty($_GET['p'])){
-
   $inicio = addslashes($_GET['p']);
-} else {
-  $inicio = 1; 
+} else{
+  $inicio = 1;
 }
 
-/* Se numero de registros for menor do que as paginas
-basta sumir usar um if para desaparecer com paginação*/
-$inicio = ($inicio - 1) * $total_reg;  
+$todosAnuncios = $a->quantidadeTodosAnuncios($filtro);
 
-echo "registros ".$total_reg."</br>";
-echo "começa ".$inicio;
+if($todosAnuncios > $por_pagina){
+  $por_pagina = ceil($todosAnuncios / $por_pagina);
+}
 
-$anuncios = $a->getAllAnuncios($filtro, $inicio, $total_reg);
+$inicio = ($inicio - 1) * $por_pagina; 
 
-$i = ceil($todosAnuncios / $total_reg);
+$anuncios = $a->getAllAnuncios($filtro, $inicio, $por_pagina);
 
+echo "Quantidade de registros: ".$todosAnuncios."<br/>";
+echo "Por página: ".$por_pagina;
+
+$paginacao = $pag; 
 
 $anunc = $a->getIdanuncio();
-
-echo "Tem ".$todosAnuncios." anúncios";
-
 
 ?>
 
@@ -90,11 +89,18 @@ echo "Tem ".$todosAnuncios." anúncios";
   </aside>
   
   <!--Conteúdo-->
-  <main class="conteudo"> 
+  <?php 
+  if($todosAnuncios > 0){
+    echo "<div style='padding: 0px 20px; font-size: 22px;'>".$todosAnuncios." registros encontrados</div>";
+  } else{
+    echo "<div style='padding: 0px 20px; font-size: 22px;'>".$todosAnuncios." registro encontrado</div>";
+  }
+
+  ?>
+  <main class="conteudo">     
     <?php
-    
-     foreach($anuncios as $anuncio): ?>
-      <!-- Preciso arrumar o campo url para o artigo funcionar o link etc.-->
+     
+     foreach($anuncios as $anuncio): ?>     
       
        <article class="box">
         <a href="<?php echo $anuncio['link']; ?>" target="_blank" style="text-decoration: none;" >
@@ -128,35 +134,33 @@ echo "Tem ".$todosAnuncios." anúncios";
   </main>
   
 
- <?php if($todosAnuncios > 10): ?><!-- paginação some se número de registros for insufiente por página-->
+ <?php if($todosAnuncios >= $por_pagina): ?><!-- paginação some se número de registros for insufiente por página-->
   <nav aria-label="Navegação de página">
    
     <ul class="pagination justify-content-center">
      
-      <li class="page-item">
-        <a class="page-link" href="#" tabindex="-1">Anterior</a>
-      </li>
+     
       
      
-      <?php for($q = 1; $q <= $i; $q++): ?>
+      <?php for($q = 1; $q <= $paginacao; $q++): ?>
 
         <!--  echo ($inicio==$q)?'bg-info':''; para usar como active dentro da classe mas preciso arrumar -->
 
         <li class="page-item ">
-          <a class="page-link" href="index.php?p=<?php echo $q; ?>">
+          <a class="page-link" href="index.php?<?php 
+          $w = $_GET;
+          $w['p'] = $q; 
+          echo http_build_query($w);
+          ?>">
           <?php echo $q; ?>            
           </a>
         </li> 
       
       <?php endfor; ?>
        
-      <li class="page-item">
+     
 
-        
-          <a class="page-link" href="index.php?p=">Próximo</a>
-       
-      </li>      
     </ul>
-
+ 
   </nav>
 <?php endif; ?>

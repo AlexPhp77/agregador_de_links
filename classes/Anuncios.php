@@ -52,14 +52,14 @@ class Anuncios extends Conexao{
 	}
 
 	public function getAllAnuncios($c, $inicio, $total_reg){        
-        
+        /*Preciso arrumar query de filtragem, pois não funciona com o filtro e paginas juntos*/
 
         if(!empty($c)){
-        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios.link, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 AND anuncios.id_categoria = :c GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT 4");
-		    $sql->bindValue(':c', $c);
+        	$sql = $this->pdo->prepare("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios.link, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 AND anuncios.id_categoria = :c GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT $inicio, $total_reg");
+		    $sql->bindValue(':c', $c);		   
 		    $sql->execute();
-        } elseif(empty($c)){
-        	$sql = $this->pdo->query("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios.link, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT $inicio , $total_reg");		    
+        } else{
+        	$sql = $this->pdo->query("SELECT anuncios.id, anuncios.id_usuario, anuncios.id_categoria, anuncios.titulo, anuncios.descricao, anuncios.ativado, anuncios.link, anuncios_imagens.url FROM anuncios INNER JOIN anuncios_imagens ON anuncios_imagens.id_anuncio = anuncios.id WHERE anuncios.ativado = 1 GROUP BY anuncios_imagens.id_anuncio ORDER BY ID DESC LIMIT $inicio , $total_reg");        	
         } 
 
 		$dados = array();
@@ -97,7 +97,7 @@ class Anuncios extends Conexao{
     
     public function quantidadeMeusAnuncios($id){
 
-    	$sql = $this->pdo->prepare("SELECT COUNT(*) as c FROM anuncios WHERE id_usuario = :id");
+    	$sql = $this->pdo->prepare("SELECT COUNT(*) as c FROM anuncios WHERE id_categoria = :id");
         $sql->bindValue(':id', $id);
 		$sql->execute();  	
         
@@ -110,9 +110,15 @@ class Anuncios extends Conexao{
         }
 
     }
-    public function quantidadeTodosAnuncios(){
-
-    	$sql = $this->pdo->query("SELECT COUNT(*) as c FROM anuncios WHERE ativado = 1");               
+    public function quantidadeTodosAnuncios($filtro){
+        
+        if(empty($filtro)){
+        	$sql = $this->pdo->query("SELECT COUNT(*) as c FROM anuncios WHERE ativado = 1");
+        } else{
+        	$sql = $this->pdo->prepare("SELECT COUNT(*) as c FROM anuncios WHERE ativado = 1 AND id_categoria = :filtro");
+        	$sql->bindValue(':filtro', $filtro);
+        	$sql->execute();
+        }    	               
 
         if($sql->rowCount() > 0){
         	$dado = $sql->fetch();
@@ -257,7 +263,7 @@ class Anuncios extends Conexao{
 		$sql->bindValue(':id', $id);
 		$sql->execute();
 
-		header("Refresh:0");			
+				
 	}
 
 	public function deletarImg($id){

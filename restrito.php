@@ -22,7 +22,9 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
     $id = addslashes($_GET['id']);	
     $a->deletarImg($id);
     $a->excluir($id);
-   header( "refresh:0;url=restrito.php" );
+    $tempo = 4;
+    echo "excluido, vc sera direcionando em:".$tempo;
+    header( "refresh:".$tempo.";url=restrito.php" );
 
 }
 

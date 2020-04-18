@@ -61,9 +61,15 @@ aside img{
 }
 
 footer{	
-
+    color: #333;
 	background-color:#ffe484;
 	padding: 12px;
+}
+footer span{
+	border-radius: 6px;	
+	background-color: #563d7c;
+	color: #ffe484;
+	float: right;
 }
 body{	
 	display: flex;
