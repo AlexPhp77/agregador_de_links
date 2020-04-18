@@ -15,9 +15,9 @@ if(isset($_GET['filtro']) && !empty($_GET['filtro'])){
   $filtro = 0;
 }
 
-$pag = 3;
 
-$por_pagina = $pag; 
+
+$por_pagina = 4; 
 
 if(isset($_GET['p']) && !empty($_GET['p'])){
   $inicio = addslashes($_GET['p']);
@@ -25,20 +25,20 @@ if(isset($_GET['p']) && !empty($_GET['p'])){
   $inicio = 1;
 }
 
+$inicio = ($inicio - 1) * $por_pagina; 
+
+$anuncios = $a->getAllAnuncios($filtro, $inicio, $por_pagina);
+
 $todosAnuncios = $a->quantidadeTodosAnuncios($filtro);
 
 if($todosAnuncios > $por_pagina){
   $por_pagina = ceil($todosAnuncios / $por_pagina);
 }
 
-$inicio = ($inicio - 1) * $por_pagina; 
-
-$anuncios = $a->getAllAnuncios($filtro, $inicio, $por_pagina);
-
 echo "Quantidade de registros: ".$todosAnuncios."<br/>";
 echo "Por página: ".$por_pagina;
 
-$paginacao = $pag; 
+
 
 $anunc = $a->getIdanuncio();
 
@@ -134,7 +134,7 @@ $anunc = $a->getIdanuncio();
   </main>
   
 
- <?php if($todosAnuncios >= $por_pagina): ?><!-- paginação some se número de registros for insufiente por página-->
+ <?php if($todosAnuncios > $por_pagina): ?><!-- paginação some se número de registros for insufiente por página-->
   <nav aria-label="Navegação de página">
    
     <ul class="pagination justify-content-center">
@@ -142,7 +142,7 @@ $anunc = $a->getIdanuncio();
      
       
      
-      <?php for($q = 1; $q <= $paginacao; $q++): ?>
+      <?php for($q = 1; $q <= $por_pagina; $q++): ?>
 
         <!--  echo ($inicio==$q)?'bg-info':''; para usar como active dentro da classe mas preciso arrumar -->
 
