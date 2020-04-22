@@ -90,7 +90,7 @@ $anunc = $a->getIdanuncio();
   
   <!--Conteúdo-->
   <?php 
-  if($todosAnuncios > 0){
+  if($todosAnuncios > 1){
     echo "<div style='padding: 0px 20px; font-size: 22px;'>".$todosAnuncios." registros encontrados</div>";
   } else{
     echo "<div style='padding: 0px 20px; font-size: 22px;'>".$todosAnuncios." registro encontrado</div>";

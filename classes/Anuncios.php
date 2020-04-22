@@ -97,7 +97,7 @@ class Anuncios extends Conexao{
     
     public function quantidadeMeusAnuncios($id){
 
-    	$sql = $this->pdo->prepare("SELECT COUNT(*) as c FROM anuncios WHERE id_categoria = :id");
+    	$sql = $this->pdo->prepare("SELECT COUNT(*) as c FROM anuncios WHERE id_usuario = :id");
         $sql->bindValue(':id', $id);
 		$sql->execute();  	
         
@@ -239,9 +239,8 @@ class Anuncios extends Conexao{
             $sql->bindValue(':url', $tmpname);
             $sql->bindValue(':id', $id);
             $sql->execute();  
-            
-            //Editado com sucesso
-            header("Location: editar.php?id=".$id);              
+                     
+            header("Location: editar.php?id=".$id);
 
 		} else{
 			echo "<div class='aviso'><ul><li>
@@ -273,9 +272,10 @@ class Anuncios extends Conexao{
 		$sql->execute();
 
 		if($sql->rowCount()>0){
-			$img = $sql->fetch();			
-			unlink('assets/images/'.$img['url']);
-			return $img['id'];	
+			$img = $sql->fetch();
+			if(file_exists('assets/images/'.$img['url'])){			
+		       	unlink('assets/images/'.$img['url']);
+			}			
 	    }
 	}
 

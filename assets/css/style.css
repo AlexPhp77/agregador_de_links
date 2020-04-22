@@ -153,6 +153,11 @@ table .img-fluid {
     min-width: 100px;
 }
 
+.mb-3, .my-3 {
+    margin-top: 29px;
+    margin-bottom: 1rem!important;
+}
+
 
 @include media-breakpoint-up(md) {
   html {

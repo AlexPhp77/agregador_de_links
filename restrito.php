@@ -16,14 +16,19 @@ $user = $u->myUsuario($id);
 
 $permissao = $u->permissoes($id);
 
-$anuncios = $a->anunciosBloqueados();
+if(!$anuncios = $a->anunciosBloqueados()){
+	echo "<div class='aviso'><ul><li>
+		    Não há anúncios para serem analisados!
+		    <a href='usuario.php' class='btn btn-primary'>Voltar</a> 
+		  </li></ul></div>";
+}
 
 if(isset($_GET['id']) && !empty($_GET['id'])){
-    $id = addslashes($_GET['id']);	
-    $a->deletarImg($id);
+    $id = addslashes($_GET['id']);
+    $a->deletarImg($id);    
     $a->excluir($id);
-    $tempo = 4;
-    echo "excluido, vc sera direcionando em:".$tempo;
+    $tempo = 3;
+    echo "<div class='aviso' style='padding-left:20px;'>Deletando daqui ".$tempo." segundos!</div>";
     header( "refresh:".$tempo.";url=restrito.php" );
 
 }
