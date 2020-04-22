@@ -157,6 +157,12 @@ table .img-fluid {
     margin-top: 29px;
     margin-bottom: 1rem!important;
 }
+.lista-usuarios{
+	color: #fff;
+    overflow: auto;	
+	height: 300px;
+	background-color:#363636;
+}
 
 
 @include media-breakpoint-up(md) {

@@ -112,25 +112,23 @@ class Usuario extends Conexao{
   
     public function getUsuario($id){    
    
-    	$sql = $this->pdo->prepare('SELECT nome, email FROM usuarios WHERE id = :id ');
+    	$sql = $this->pdo->prepare('SELECT id, nome, email FROM usuarios WHERE id = :id');
     	$sql->bindValue(':id', $id);    	
     	$sql->execute();
         
-        $dados = array();
+        $dado = array();
     	if($sql->rowCount() > 0){
 
     		return $dado = $sql->fetch();    		
-    	} return $dados;
+    	} return $dado;
     }  
-    public function todosUsuarios(){           	
-
+    public function todosUsuarios(){ 
+        $dados = array(); 
     	$sql = $this->pdo->query('SELECT nome, email FROM usuarios');
 
     	if($sql->rowCount() > 0){
-
-            return $dado = $sql->fetchAll();           
-        }        
-       
+            return $dados = $sql->fetchAll();           
+        } return $dados;   
     }
     public function excluir($id){
 

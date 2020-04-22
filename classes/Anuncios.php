@@ -325,4 +325,17 @@ class Anuncios extends Conexao{
 		$sql->execute();
 
 	}
+	/*Segurança não funciona*/
+	public function seguranca($id){
+		$sql = $this->pdo->prepare("SELECT anuncios.id FROM anuncios INNER JOIN usuarios ON usuarios.id = anuncios.id_usuario WHERE anuncios.id = :id AND anuncios.id_usuario = :iduser");
+		$sql->bindValue(':iduser', $_SESSION['logado']);
+		$sql->bindValue(':id', $id);
+		$sql->execute();
+
+		if($sql->rowCount() > 0){
+			return true;
+		} else{
+			return false; 
+		}
+	}
 }

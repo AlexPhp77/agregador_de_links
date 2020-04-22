@@ -6,14 +6,24 @@ if(!isset($_SESSION['logado']) && empty($_SESSION['logado'])){
 
 require 'classes/Anuncios.php';
 $a = new Anuncios();
-$quantidade = $a->quantidadeMeusAnuncios($_SESSION['logado']);
+
+
 
 if(isset($_GET['id']) && !empty($_GET['id'])){
     $id = addslashes($_GET['id']);	
-
-    $a->excluir($id);
-
+    /*Usuário só ter permissão para excluir seu próprio anuncio*/
+    if($a->seguranca($id)){
+    	$a->excluir($id);
+    } else {
+    	header('Location: index.php');
+    }  
 }
+
+
+
+$quantidade = $a->quantidadeMeusAnuncios($_SESSION['logado']);
+
+
 
 ?>
 
