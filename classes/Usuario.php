@@ -227,29 +227,28 @@ class Usuario extends Conexao{
         if($sql->rowCount() > 0){
             $sql = $sql->fetch();
 
-            $id = $sql['id_usuario'];
-            echo $id; 
+            $id = $sql['id_usuario'];             
 
-            echo "Link válido!<br/>";
+            echo "Link válido!<br/><br/>";
             $sql = $this->pdo->prepare("UPDATE usuarios SET senha = md5(:senha) WHERE id = :id");
             $sql->bindValue(':senha', $this->senha);
             $sql->bindValue(':id', $id);
             $sql->execute(); 
             
-
-            if($this->setSenha($senha)){
+            $senha = 0; 
+            if(!empty($senha)){
 
                 $sql = $this->pdo->prepare("UPDATE usuarios_token SET used = 1 WHERE cod = :cod");
                 $sql->bindValue(':cod', $cod);
                 $sql->execute(); 
 
                 Echo "Senha alterada com sucesso!";
+               
             }
 
         } else{
             echo "Código inválido!";
             exit; 
-
         }
     }
 }

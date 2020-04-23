@@ -9,8 +9,9 @@ if(!empty($_GET['cod'])){
 		$senha = addslashes($_POST['senha']);    
 	    
 	    $u->setSenha($senha);
-	    $u->redefinirSenha($cod);  
+	      
 	}    
+	$u->redefinirSenha($cod);
 		  
 }
 
