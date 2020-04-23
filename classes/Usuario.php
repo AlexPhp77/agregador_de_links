@@ -106,7 +106,8 @@ class Usuario extends Conexao{
 
     		header('Location: index.php');
     	} else{
-    		echo "<div class='aviso'><ul><li>E-mail e/ou senha errados. Tente novamente!</li></ul></div>";
+    		echo "<div class='aviso'><ul><li>E-mail e/ou senha errados. Tente novamente!
+                  <li>Esqueceu sua senha? <a href='recuperar.php' class='text-success'>Clique aqui!</a></li></ul></div>";
     	}
     }  
   
@@ -180,5 +181,81 @@ class Usuario extends Conexao{
            return $dado = $sql->fetch();
         }
     }
+    public function recuperarSenha(){
+        $sql = $this->pdo->prepare("SELECT id, email FROM usuarios WHERE email = :email");
+        $sql->bindValue(':email', $this->email);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+
+            $sql = $sql->fetch();
+            $id = $sql['id']; 
+
+            $cod = md5(time().rand(0, 9999).rand(0, 9999));
+
+            $sql = $this->pdo->prepare("INSERT INTO usuarios_token SET id_usuario = :id_usuario, cod = :cod, tempo_cod = :tempo_cod");
+            $sql->bindValue(':id_usuario', $id);
+            $sql->bindValue(':cod', $cod); /*hora atual mais dois meses*/
+            $sql->bindValue(':tempo_cod', date('Y-m-d H:i', strtotime('+2 months')));
+            $sql->execute();
+
+            $link = "http://localhost/sistemas/agregador_links/redefinir.php?cod=".$cod;
+
+            $mensagem = "Clique no link para redefinir sua senha: ".$link;
+
+            $assunto = "Redefinição de senha"; 
+
+            $headers = "From: meuemail@meusite.com.br"."\r\n".
+                       "X-Mailer: PHP/".phpversion();
+
+            // mail($email, $assunto, $mensagem, $headers);    
+
+            echo $mensagem;
+            exit;       
+
+        } else {
+            echo "<div class='aviso'><ul><li>E-mail não foi encontrado. Por favor digite novamente!</li></ul></div>";
+        }
+    }
+
+    public function redefinirSenha($cod){
+
+        $sql = $this->pdo->prepare("SELECT * FROM usuarios_token WHERE cod = :cod AND used = 0 AND tempo_cod > NOW()");
+        $sql->bindValue(':cod', $cod);              
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            $sql = $sql->fetch();
+
+            $id = $sql['id_usuario'];
+            echo $id; 
+
+            echo "Link válido!<br/>";
+            $sql = $this->pdo->prepare("UPDATE usuarios SET senha = md5(:senha) WHERE id = :id");
+            $sql->bindValue(':senha', $this->senha);
+            $sql->bindValue(':id', $id);
+            $sql->execute(); 
+            
+
+            if($this->setSenha($senha)){
+
+                $sql = $this->pdo->prepare("UPDATE usuarios_token SET used = 1 WHERE cod = :cod");
+                $sql->bindValue(':cod', $cod);
+                $sql->execute(); 
+
+                Echo "Senha alterada com sucesso!";
+            }
+
+        } else{
+            echo "Código inválido!";
+            exit; 
+
+        }
+    }
 }
 
+
+
+ /*$sql = $this->pdo->prepare("UPDATE usuarios WHERE senha = :senha");
+        $sql->bindValue(':senha', $this->senha);
+        $sql->execute();*/
