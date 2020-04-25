@@ -35,11 +35,6 @@ if($todosAnuncios > $por_pagina){
   $por_pagina = ceil($todosAnuncios / $por_pagina);
 }
 
-echo "Quantidade de registros: ".$todosAnuncios."<br/>";
-echo "Por página: ".$por_pagina;
-
-
-
 $anunc = $a->getIdanuncio();
 
 ?>
@@ -77,8 +72,7 @@ $anunc = $a->getIdanuncio();
               <?php echo utf8_encode($categoria['nome']); ?>  
             </option>
       <?php endforeach; ?>
-      </select><br/>  <!--Necessário tornar filtro dinamico e arrumar 
-       quando atualizo fica bloqueado anuncio, precia ativar como valor 1-->
+      </select><br/>  <!--Necessário tornar filtro dinamico -->
 
 
         <input class="form-control btn btn-info" type="submit" value="pesquisar">

@@ -44,6 +44,9 @@
     margin: 4px;  
     flex: 1;
 } 
+.box img{
+	 max-height: 180px;
+}
 aside{
 	color: #fff;
 	font-size: 18px;
@@ -112,6 +115,7 @@ body{
 	
 }
 .aviso{
+
     padding-top: 10px;	
 	background-color:#563d7c;
 	color:#fff;
@@ -144,10 +148,11 @@ table img{
 	padding: 5px;	
 	border-top-right-radius: 30px;
 }
-.img-fluid {
+.img-fluid {	
     max-width: 100%;
     height: auto;
     min-width: 200px;
+   
 }
 table .img-fluid {   
     min-width: 100px;
@@ -164,9 +169,3 @@ table .img-fluid {
 	background-color:#363636;
 }
 
-
-@include media-breakpoint-up(md) {
-  html {
-    font-size: 1.4rem;
-  }
-}

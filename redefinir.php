@@ -1,6 +1,6 @@
 <?php
-require 'classes/Usuario.php';
-$u = new Usuario();
+require 'template/header.php';
+
 
 if(!empty($_GET['cod'])){
 	$cod = $_GET['cod'];
@@ -16,10 +16,14 @@ if(!empty($_GET['cod'])){
 }
 
 ?>
-<form method="POST">
-	Digite sua nova senha:<br/>
-	<input type="password" name="senha"><br/><br/>
-	<input type="submit" value="Redefinir">	
-</form>
+
+<div class="caixa">
+	<form method="POST">
+	  Digite sua nova senha:<br/>
+	  <input type="password" name="senha"><br/><br/>
+	  <input class="btn btn-info" type="submit" value="Redefinir">	
+    </form>	
+</div>
 
 
+<?php require 'template/footer.php'; ?>

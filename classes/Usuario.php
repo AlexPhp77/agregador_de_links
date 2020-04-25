@@ -208,7 +208,7 @@ class Usuario extends Conexao{
             $headers = "From: meuemail@meusite.com.br"."\r\n".
                        "X-Mailer: PHP/".phpversion();
 
-            // mail($email, $assunto, $mensagem, $headers);    
+            //mail($this->email, $assunto, $mensagem, $headers);    
 
             echo $mensagem;
             exit;       
@@ -229,7 +229,7 @@ class Usuario extends Conexao{
 
             $id = $sql['id_usuario'];             
 
-            echo "Link válido!<br/><br/>";
+            echo "<div class='aviso bg-success'><ul><li>Link válido!</li></ul></div>";
             $sql = $this->pdo->prepare("UPDATE usuarios SET senha = md5(:senha) WHERE id = :id");
             $sql->bindValue(':senha', $this->senha);
             $sql->bindValue(':id', $id);
@@ -247,7 +247,7 @@ class Usuario extends Conexao{
             }
 
         } else{
-            echo "Código inválido!";
+            echo "<div class='bg-danger' style='color:#fff;'><ul><li>Link de redefinição de senha inválido ou inspirado!</li></ul></div>";
             exit; 
         }
     }

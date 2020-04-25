@@ -1,6 +1,6 @@
 <?php
-require 'classes/Usuario.php';
-$u = new Usuario();
+require 'template/header.php';
+
 
 
 if(isset($_POST['email']) && !empty($_POST['email'])){
@@ -12,8 +12,13 @@ if(isset($_POST['email']) && !empty($_POST['email'])){
 }
 
 ?>
-<form method="POST">
-	Digite seu e-mail:<br/>
-	<input type="text" name="email"><br/><br/>
-	<input type="submit" value="Enviar">	
-</form>
+
+<div class="caixa">
+	<form method="POST" class="envio">
+	  Digite seu e-mail:<br/>
+	  <input type="text" name="email"><br/><br/>
+	  <input class="btn btn-info" type="submit" value="Enviar">	
+    </form>	
+</div>
+
+<?php require 'template/footer.php'; ?>

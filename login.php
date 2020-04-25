@@ -23,6 +23,6 @@ if(isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) &
 		<input class="btn btn-info" type="submit" value="Entrar">
 	</form>			
 
-</div>
+</div> 
 
 <?php require 'template/footer.php'; ?>
