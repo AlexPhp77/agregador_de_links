@@ -65,8 +65,7 @@ $usuarios = $u->todosUsuarios();
 	    		<?php echo "<span style='padding: 20px;' class='text-warning'>Nome:</span> ".$usuario['nome']." || <span class='text-warning'>E-mail:</span> ".$usuario['email']."</br><hr>"; ?>
 	    	<?php endforeach; ?>	
 	    </div>
-    <?php endif; ?>   
-    
+    <?php endif; ?> 
 
 <?php require 'template/footer.php'; ?>
 

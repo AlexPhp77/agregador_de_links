@@ -22,8 +22,7 @@ class Usuario extends Conexao{
 		if(strlen($nome) > 2 && is_string($nome)){
 			$this->nome = $nome;
             
-		}
-		else{
+		}else{
             echo "<div class='aviso'><ul><li>Nome de usuário precisa ter mais de 2 caracteres e ser formado apenas por letras ou letras e números!</li></ul></div>";
 		}
 	}   
@@ -139,12 +138,14 @@ class Usuario extends Conexao{
 
     	header('Location: index.php');
     }
-    public function editar($id){   
+    public function editar($id, $nome, $email){   
 
       $sql = $this->pdo->prepare('UPDATE usuarios SET nome = :nome WHERE id = :id'); 
-            $sql->bindValue(':nome', $this->nome); 
+            $sql->bindValue(':nome', $this->nome);            
             $sql->bindValue(':id', $id);
             $sql->execute();
+
+            echo "<div class='aviso'><ul><li>Usuário editado!</li></ul></div>";
 
     	if($this->verificarEmail() == false){ 
 
@@ -152,11 +153,12 @@ class Usuario extends Conexao{
             $sql->bindValue(':email', $this->email);
             $sql->bindValue(':id', $id);
             $sql->execute();
-
-            header("Location: index.php");
+           
         } else{
-            echo "Esse e-mail já está sendo usado!<br/>";
+            echo "<div class='aviso'><ul><li>Esse e-mail já está sendo usado!</li></ul></div>";
         }
+
+        header("Refresh: 2; url=editar_usuario.php");
 
     }
 
@@ -201,7 +203,7 @@ class Usuario extends Conexao{
 
             $link = "http://localhost/sistemas/agregador_links/redefinir.php?cod=".$cod;
 
-            $mensagem = "Clique no link para redefinir sua senha: ".$link;
+            $mensagem = "Olá, você solicitou uma alteração de senha? Clique no link para redefiní-la: ".$link."<br/>Caso contrário, ignore essa mensagem! Obrigado";
 
             $assunto = "Redefinição de senha"; 
 
@@ -248,6 +250,7 @@ class Usuario extends Conexao{
 
         } else{
             echo "<div class='bg-danger' style='color:#fff;'><ul><li>Link de redefinição de senha inválido ou inspirado!</li></ul></div>";
+            header("Refresh: 3; url=login.php");
             exit; 
         }
     }
