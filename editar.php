@@ -45,7 +45,7 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
    
 	<div class="row">
 	    <div class="col-sm">      
-	       <form method="POST" enctype="multipart/form-data">
+	       <form class="form-mobile" method="POST" enctype="multipart/form-data">
 			<div class="form-group">
 				Título<br/>
 			    <input minlength="5" maxlength="100" class="form-control"  type="text" name="titulo" placeholder="Título anúncio" value="<?php echo $dados['titulo']; ?>">
@@ -86,7 +86,7 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
 		  
 	    </div>
 	    <div class="col-sm">
-	      <div class="card mb-3">
+	      <div class="card mb-3 imagem">
 	      	<?php $arquivoimg = 'assets/images/'.$dados["url"]; ?>
 	      	<?php if(!empty($dados['url']) && file_exists($arquivoimg)): ?>
 			<img style="width: 500px;" class="img-fluid" src="assets/images/<?php echo $dados['url']; ?>">
