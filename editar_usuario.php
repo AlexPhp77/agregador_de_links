@@ -18,6 +18,8 @@ if(!empty($_POST['nome']) && !empty($_POST['email'])){
     $u->setEmail($email);
 
 	$u->editar($id, $nome, $email);
+	
+	echo "<meta HTTP-EQUIV='refresh' CONTENT='5;URL=editar_usuario.php'>";
 }
 
 ?>

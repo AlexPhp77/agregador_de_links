@@ -239,8 +239,10 @@ class Anuncios extends Conexao{
             $sql->bindValue(':url', $tmpname);
             $sql->bindValue(':id', $id);
             $sql->execute();  
-                     
-            header("Location: editar.php?id=".$id);
+
+            echo "<script>window.location.href='editar.php?id=".$id."</script>";
+           
+            //header("Location: editar.php?id=".$id);
 
 		} else{
 			echo "<div class='aviso'><ul><li>
@@ -295,9 +297,15 @@ class Anuncios extends Conexao{
 		$sql = $this->pdo->prepare("INSERT INTO anuncios_imagens SET id_anuncio = :id_anuncio, url = :url");
 		$sql->bindValue(':id_anuncio', $id_final);
 		$sql->bindValue(':url', 'url_imagem');
-		$sql->execute();
+		$sql->execute();		
 
-		header("Location: anuncios.php");
+		?>
+			<script type="text/javascript">			   
+			    window.location.href='anuncios.php';
+			</script>
+		<?php
+
+		
 	}
 
 	public function anunciosBloqueados(){

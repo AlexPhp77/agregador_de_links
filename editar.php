@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
 require 'template/header.php';
 require 'classes/Anuncios.php';
 $a = new Anuncios();
@@ -30,12 +31,15 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
     if(isset($_FILES['imagem']) && !empty($_FILES['imagem']['tmp_name'])){
         $imagem = $_FILES['imagem']; 
         $a->editarAnuncioImg($id, $imagem);        
-         
+        
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>";       
     }
 
 	$a->usarMetodosAnuncio($titulo, $descricao, $categoria, $link);
 	
 	$a->editarAnuncio($id);
+
+	echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>"; 
 		
 }
 
@@ -65,7 +69,7 @@ if(!empty($_POST['titulo']) && !empty($_POST['descricao'])){
                    
 
 			      <option  value="<?php echo $categoria['id'];?>"<?php echo ($categoria['id']==$dados['id_categoria'])?'selected="selected"':''; ?>>
-			      	<?php echo utf8_encode($categoria['nome']); ?>	
+			      	<?php echo $categoria['nome']; ?>	
 			      </option>
 
 			      <?php endforeach; ?>

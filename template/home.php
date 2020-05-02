@@ -69,13 +69,13 @@ $anunc = $a->getIdanuncio();
             <?php foreach($categorias as $categoria): ?>  
 
               <option  value="<?php echo $categoria['id'];?>">
-              <?php echo utf8_encode($categoria['nome']); ?>  
+              <?php echo $categoria['nome']; ?>  
             </option>
       <?php endforeach; ?>
       </select><br/>  <!--Necessário tornar filtro dinamico -->
 
 
-        <input class="form-control btn btn-info" type="submit" value="pesquisar">
+        <input class="form-control btn btn-info" type="submit" value="Pesquisar">
       </div>
     </div>
   </form>

@@ -25,7 +25,13 @@ if(isset($_GET['anuncio_usuario']) && !empty($_GET['anuncio_usuario'])){
 
 $a->ativarAnuncio($anuncio_usuario);
 
-header('Location: restrito.php');
+?>
+	<script type="text/javascript">			   
+	    window.location.href='restrito.php';
+	</script>
+
+<?php
+
 exit();
 
 

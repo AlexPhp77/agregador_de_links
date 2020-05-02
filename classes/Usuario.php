@@ -103,7 +103,7 @@ class Usuario extends Conexao{
 
     		$_SESSION['logado'] = $id['id'];            
 
-    		header('Location: index.php');
+    		echo "<script>window.location.href='index.php'</script>";
     	} else{
     		echo "<div class='aviso'><ul><li>E-mail e/ou senha errados. Tente novamente!
                   <li>Esqueceu sua senha? <a href='recuperar.php' class='text-success'>Clique aqui!</a></li></ul></div>";
@@ -198,22 +198,27 @@ class Usuario extends Conexao{
             $sql = $this->pdo->prepare("INSERT INTO usuarios_token SET id_usuario = :id_usuario, cod = :cod, tempo_cod = :tempo_cod");
             $sql->bindValue(':id_usuario', $id);
             $sql->bindValue(':cod', $cod); /*hora atual mais dois meses*/
-            $sql->bindValue(':tempo_cod', date('Y-m-d H:i', strtotime('+2 months')));
+            $sql->bindValue(':tempo_cod', date('Y-m-d H:i', strtotime('+1 hours')));
             $sql->execute();
 
-            $link = "http://localhost/sistemas/agregador_links/redefinir.php?cod=".$cod;
+             $link = "http://www.lalehub.com.br/redefinir.php?cod=".$cod;
 
-            $mensagem = "Olá, você solicitou uma alteração de senha? Clique no link para redefiní-la: ".$link."<br/>Caso contrário, ignore essa mensagem! Obrigado";
+            $mensagem = "Olá, você solicitou uma alteração de senha? Clique no link para redefiní-la: ".$link."\r\n"." Caso contrário, ignore essa mensagem! Obrigado";
 
             $assunto = "Redefinição de senha"; 
 
-            $headers = "From: meuemail@meusite.com.br"."\r\n".
+            utf8_encode($assunto);
+
+            $headers = "From: contato@lalehub.com.br"."\r\n".
                        "X-Mailer: PHP/".phpversion();
 
-            //mail($this->email, $assunto, $mensagem, $headers);    
+            mail($this->email, $assunto, $mensagem, $headers);    
 
-            echo $mensagem;
-            exit;       
+            //echo $mensagem;
+            echo "<div class='bg-danger' style='color:#fff;'><ul><li>Verifique seu e-mail para redefinir sua senha! Obs: pode ser que esteja na caixa de spam.</li></ul></div>";
+            header("Refresh: 5; url=login.php");
+            exit; 
+                
 
         } else {
             echo "<div class='aviso'><ul><li>E-mail não foi encontrado. Por favor digite novamente!</li></ul></div>";

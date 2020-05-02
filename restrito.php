@@ -26,11 +26,13 @@ if(!$anuncios = $a->anunciosBloqueados()){
 if(isset($_GET['id']) && !empty($_GET['id'])){
     $id = addslashes($_GET['id']);
     $a->deletarImg($id);    
-    $a->excluir($id);
-    $tempo = 3;
-    echo "<div class='aviso' style='padding-left:20px;'>Deletando daqui ".$tempo." segundos!</div>";
-    header( "refresh:".$tempo.";url=restrito.php" );
+    $a->excluir($id);  
 
+    ?>
+		<script type="text/javascript">			   
+		    window.location.href='restrito.php';
+		</script>
+	<?php
 }
 
 
